@@ -1,26 +1,27 @@
-export class KeyPressListner {
-  constructor(keyCode, callback) {
-    let keySafe = true
-    this.keyDownFunction = (event) => {
-      if (event.code === keyCode) {
-        if (keySafe) {
-          keySafe = false
-          callback()
-        }
+export class inputHandler {
+  constructor() {
+    this.keys = []
+    window.addEventListener('keydown', (e) => {
+      if (
+        (e.code === 'KeyW' ||
+          e.code === 'KeyS' ||
+          e.code === 'KeyA' ||
+          e.code === 'KeyD') &&
+        this.keys.indexOf(e.code) === -1
+      ) {
+        this.keys.push(e.code)
       }
-    }
+    })
 
-    this.keyUpFunction = (event) => {
-      if (event.code === keyCode) {
-        keySafe = true
+    window.addEventListener('keyup', (e) => {
+      if (
+        e.code === 'KeyW' ||
+        e.code === 'KeyS' ||
+        e.code === 'KeyA' ||
+        e.code === 'KeyD'
+      ) {
+        this.keys.splice(this.keys.indexOf(e.code), 1)
       }
-    }
-
-    document.addEventListener('keydown', this.keyDownFunction)
-    document.addEventListener('keyup', this.keyUpFunction)
-  }
-  unbind() {
-    document.addEventListener('keydown', this.keyDownFunction)
-    document.addEventListener('keyup', this.keyUpFunction)
+    })
   }
 }
