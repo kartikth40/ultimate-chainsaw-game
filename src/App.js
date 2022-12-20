@@ -1,6 +1,6 @@
 // import logo from './logo.svg'
 // import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Player } from './classes/Player'
 import { InputHandler } from './classes/InputHandler'
@@ -15,8 +15,13 @@ function App() {
 
   const player = new Player(GAME_WIDTH, GAME_HEIGHT)
 
+  const firstRender = useRef(true)
+
   useEffect(() => {
-    init()
+    if (firstRender.current) {
+      firstRender.current = false
+      init()
+    }
   }, [])
 
   const init = () => {
