@@ -3,47 +3,42 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Player } from './classes/Player'
-import { inputHandler } from './classes/KeyPressListner'
+import { InputHandler } from './classes/InputHandler'
 import Character from './components/gameComponents/Character'
 
 function App() {
   let canvas
   let ctx
+  let input
+  const GAME_WIDTH = window.innerWidth
+  const GAME_HEIGHT = window.innerHeight
+
+  const player = new Player(GAME_WIDTH, GAME_HEIGHT)
 
   useEffect(() => {
-    console.log('helo')
-    const input = new inputHandler()
-    canvas = document.querySelector('#game-container')
-    ctx = canvas.getContext('2d')
-    canvas.width = 600
-    canvas.height = 380
+    init()
   }, [])
 
-  // const [player, setPlayer] = useState(new Player(1, 'zolo', 100, 100, 'right'))
+  const init = () => {
+    input = new InputHandler()
+    canvas = document.querySelector('#game-container')
+    ctx = canvas.getContext('2d')
+    canvas.width = GAME_WIDTH
+    canvas.height = GAME_HEIGHT
 
-  // console.log('------->', player.position)
+    player.draw(ctx)
+    player.update(input)
 
-  // const handleKeyPress = (xChange, yChange) => {
-  //   setPlayer((prev) => {
-  //     const newX = prev.position.x + xChange
-  //     const newY = prev.position.y + yChange
-  //     let newDirection = player.direction
+    animate()
+  }
 
-  //     if (xChange > 0) {
-  //       newDirection = 'right'
-  //     }
-  //     if (xChange < 0) {
-  //       newDirection = 'left'
-  //     }
-  //     return {
-  //       ...prev,
-  //       direction: newDirection,
-  //       position: { x: newX, y: newY },
-  //     }
-  //   })
-  // }
-
-  const animate = () => {}
+  const animate = () => {
+    // console.log('animate')
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT)
+    player.update(input)
+    player.draw(ctx)
+    requestAnimationFrame(animate)
+  }
   return (
     <GameContainer id="game-container">
       {/* <Character positionx={player.position.x} positiony={player.position.y} /> */}
@@ -54,8 +49,11 @@ function App() {
 export default App
 
 const GameContainer = styled.canvas`
+  position: absolute;
   background-color: hsl(350, 100%, 80%);
-  /* width: 100vw;
-  max-width: 100vw;
-  max-height: 100vh; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
 `
