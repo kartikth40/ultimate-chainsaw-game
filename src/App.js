@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Player } from './classes/Player'
 import { InputHandler } from './classes/InputHandler'
 import Character from './components/gameComponents/Character'
+import { Surface } from './classes/Objects/Surface'
 
 function App() {
   let canvas
@@ -40,8 +41,34 @@ function App() {
   const animate = () => {
     // console.log('animate')
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT)
+    const pixelSize = GAME_WIDTH / 50
+    new Surface(ctx, 20, 1, 3, 1, GAME_WIDTH, GAME_HEIGHT)
+
     player.update(input)
     player.draw(ctx)
+
+    // Box width
+    var bw = GAME_WIDTH
+    // Box height
+    var bh = GAME_HEIGHT
+    // Padding
+    var p = 0
+    function drawBoard() {
+      const bw = GAME_WIDTH
+      const bh = GAME_HEIGHT
+      const lw = 0.2 // box border
+      const boxRow = 50 // how many boxes
+      const box = bw / boxRow // box size
+      ctx.lineWidth = lw
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.822)'
+      for (let x = 0; x < bw; x += box) {
+        for (let y = bh; y >= 0; y -= box) {
+          ctx.strokeRect(x, y, box, box)
+        }
+      }
+    }
+
+    drawBoard()
     requestAnimationFrame(animate)
   }
   return (

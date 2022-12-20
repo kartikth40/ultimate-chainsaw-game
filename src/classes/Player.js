@@ -5,12 +5,12 @@ export class Player {
     // this.id = id
     // this.name = name
     // this.direction = direction
-    this.width = 50
-    this.height = 50
+    this.width = this.gameWidth / 50
+    this.height = this.width
     this.x = 0
     this.y = this.gameHeight - this.height
-    this.SPEED_X = 10
-    this.SPEED_Y = 20
+    this.SPEED_X = 5
+    this.SPEED_Y = 15
     // this.GRAVITY = 1
     this.velocityX = 0
     this.velocityY = 0
@@ -46,6 +46,7 @@ export class Player {
     if (this.x < 0) this.x = 0
     else if (this.x > this.gameWidth - this.width)
       this.x = this.gameWidth - this.width
+
     // vertical movement
     this.y += this.velocityY
     if (!this.onGround()) {
@@ -75,12 +76,12 @@ export class Player {
     }
     if (this.isSliding) {
       if (input.keys.indexOf('Space') > -1) {
-        this.velocityX -= 50
+        this.velocityX -= 10
         this.velocityY = -1 * this.SPEED_Y
         this.wallJumping = true
       }
     } else if (this.wallJumping) {
-      this.velocityX = -100
+      this.velocityX = -50
       this.velocityY = -1 * this.SPEED_Y
       this.wallJumping = false
     }
