@@ -6,6 +6,7 @@ export class SpriteSheet {
     this.tiles = new Map()
   }
 
+  // define current sprite at (x,y) of the spritesheet
   define(name, x, y) {
     const buffer = document.createElement('canvas')
     buffer.width = this.width
@@ -26,8 +27,13 @@ export class SpriteSheet {
     this.tiles.set(name, buffer)
   }
 
+  // draw the sprite on 'context' at (x,y)
   draw(name, context, x, y) {
     const buffer = this.tiles.get(name)
     context.drawImage(buffer, x, y)
+  }
+
+  drawTile(name, context, x, y) {
+    this.draw(name, context, x * this.width, y * this.height)
   }
 }

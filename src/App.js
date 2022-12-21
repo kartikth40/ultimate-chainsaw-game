@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { Player } from './classes/Player'
 import { SpriteSheet } from './classes/SpriteSheet'
 import { InputHandler } from './classes/InputHandler'
-import Character from './components/gameComponents/Character'
 import { Surface } from './classes/Objects/Surface'
+import { loadImage, loadMap } from './functions/loader'
 
 function App() {
   let canvas
@@ -26,14 +26,23 @@ function App() {
     }
   }, [])
 
-  const loadImage = (url) => {
-    return new Promise((resolve) => {
-      const image = new Image()
-      image.addEventListener('load', () => {
-        resolve(image)
-      })
-      image.src = url
+  const drawBackground = (bg, ctx, sprites) => {
+    bg.ranges.forEach(([x1, x2, y1, y2]) => {
+      console.log(x1, x2, y1, y2)
+      for (let x = x1; x < x2; x++) {
+        for (let y = y1; y < y2; y++) {
+          sprites.drawTile(bg.tile, ctx, x, y)
+        }
+      }
     })
+  }
+
+  const loadBackgroundSprites = async () => {
+    const image = await loadImage('/img/tiles.png')
+    const sprites = new SpriteSheet(image, 32, 32)
+    sprites.define('ground', 0, 0)
+    sprites.define('sky', 0, 2)
+    return sprites
   }
 
   const init = () => {
@@ -47,17 +56,19 @@ function App() {
     canvas.width = GAME_WIDTH
     canvas.height = GAME_HEIGHT
 
-    loadImage('/img/tiles.png').then((image) => {
-      const sprites = new SpriteSheet(image, 32, 32)
-      sprites.define('ground', 0, 0)
-      sprites.draw('ground', ctx, 100, 100)
-    })
-
-    player.draw(ctx)
-    // player.update(input)
-
-    // animate()
+    // load all
+    Promise.all([loadBackgroundSprites(), loadMap('pink')]).then(
+      ([sprites, map]) => {
+        map.backgrounds.forEach((background) => {
+          drawBackground(background, ctx, sprites)
+        })
+      }
+    )
   }
+
+  // player.draw(ctx)
+  // player.update(input)
+  // animate()
 
   const animate = () => {
     // console.log('animate')
@@ -88,21 +99,17 @@ function App() {
       }
     }
 
-    drawBoard()
+    // drawBoard()
     requestAnimationFrame(animate)
   }
-  return (
-    <GameContainer id="game-container">
-      {/* <Character positionx={player.position.x} positiony={player.position.y} /> */}
-    </GameContainer>
-  )
+  return <GameContainer id="game-container"></GameContainer>
 }
 
 export default App
 
 const GameContainer = styled.canvas`
   position: absolute;
-  background-color: hsl(350, 100%, 80%);
+  /* background-color: hsl(350, 100%, 80%); */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
