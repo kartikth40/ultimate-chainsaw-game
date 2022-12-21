@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Player } from './classes/Player'
+import { SpriteSheet } from './classes/SpriteSheet'
 import { InputHandler } from './classes/InputHandler'
 import Character from './components/gameComponents/Character'
 import { Surface } from './classes/Objects/Surface'
@@ -25,26 +26,45 @@ function App() {
     }
   }, [])
 
+  const loadImage = (url) => {
+    return new Promise((resolve) => {
+      const image = new Image()
+      image.addEventListener('load', () => {
+        resolve(image)
+      })
+      image.src = url
+    })
+  }
+
   const init = () => {
     input = new InputHandler()
+    input.addMapping('Space', (keyState) => {
+      console.log(keyState)
+    })
+    input.listenTo(window)
     canvas = document.querySelector('#game-container')
     ctx = canvas.getContext('2d')
     canvas.width = GAME_WIDTH
     canvas.height = GAME_HEIGHT
 
-    player.draw(ctx)
-    player.update(input)
+    loadImage('/img/tiles.png').then((image) => {
+      const sprites = new SpriteSheet(image, 32, 32)
+      sprites.define('ground', 0, 0)
+      sprites.draw('ground', ctx, 100, 100)
+    })
 
-    animate()
+    player.draw(ctx)
+    // player.update(input)
+
+    // animate()
   }
 
   const animate = () => {
     // console.log('animate')
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT)
-    const pixelSize = GAME_WIDTH / 50
     new Surface(ctx, 20, 1, 3, 1, GAME_WIDTH, GAME_HEIGHT)
 
-    player.update(input)
+    // player.update(input)
     player.draw(ctx)
 
     // Box width

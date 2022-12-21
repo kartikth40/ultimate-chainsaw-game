@@ -1,36 +1,41 @@
 export class InputHandler {
   constructor() {
-    this.keys = []
-    window.addEventListener('keydown', (e) => {
-      // if (e.repeat) {
-      //   this.remove('Space')
-      //   return
-      // }
-      if (
-        (e.code === 'Space' ||
-          e.code === 'KeyS' ||
-          e.code === 'KeyA' ||
-          e.code === 'KeyD') &&
-        this.keys.indexOf(e.code) === -1
-      ) {
-        this.keys.push(e.code)
-      }
-      console.log(this.keys)
-    })
-
-    window.addEventListener('keyup', (e) => {
-      if (
-        e.code === 'Space' ||
-        e.code === 'KeyS' ||
-        e.code === 'KeyA' ||
-        e.code === 'KeyD'
-      ) {
-        this.keys.splice(this.keys.indexOf(e.code), 1)
-      }
-    })
+    // Holds the current state of a given key
+    this.keyStates = new Map()
+    // Holds the callback function for a key code
+    this.keyMap = new Map()
   }
 
-  remove(code) {
-    this.keys.splice(this.keys.indexOf(code), 1)
+  addMapping(keyCode, callback) {
+    this.keyMap.set(keyCode, callback)
+  }
+
+  handleEvent(e) {
+    const keyCode = e.code
+
+    if (!this.keyMap.has(keyCode)) {
+      // Did not have key mapped
+      return
+    }
+
+    e.preventDefault()
+
+    const keyState = e.type === 'keydown' ? 1 : 0
+
+    if (this.keyStates.get(keyCode) === keyState) {
+      return
+    }
+
+    this.keyStates.set(keyCode, keyState)
+    console.log(this.keyStates)
+    this.keyMap.get(keyCode)(keyState)
+  }
+
+  listenTo(window) {
+    ;['keydown', 'keyup'].forEach((eventName) => {
+      window.addEventListener(eventName, (event) => {
+        this.handleEvent(event)
+      })
+    })
   }
 }
