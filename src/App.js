@@ -1,12 +1,11 @@
-// import logo from './logo.svg'
-// import './App.css'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Player } from './classes/Player'
-import { SpriteSheet } from './classes/SpriteSheet'
 import { InputHandler } from './classes/InputHandler'
-import { Surface } from './classes/Objects/Surface'
-import { loadImage, loadMap } from './functions/loader'
+import { loadMap } from './functions/loader'
+import { loadBackgroundSprites, loadPlayerSprite } from './functions/sprites'
+import { Compositor } from './classes/Compositor'
+import { createBackgroundLayer, createSpriteLayer } from './functions/layers'
 
 function App() {
   let canvas
@@ -26,25 +25,6 @@ function App() {
     }
   }, [])
 
-  const drawBackground = (bg, ctx, sprites) => {
-    bg.ranges.forEach(([x1, x2, y1, y2]) => {
-      console.log(x1, x2, y1, y2)
-      for (let x = x1; x < x2; x++) {
-        for (let y = y1; y < y2; y++) {
-          sprites.drawTile(bg.tile, ctx, x, y)
-        }
-      }
-    })
-  }
-
-  const loadBackgroundSprites = async () => {
-    const image = await loadImage('/img/tiles.png')
-    const sprites = new SpriteSheet(image, 32, 32)
-    sprites.define('ground', 0, 0)
-    sprites.define('sky', 0, 2)
-    return sprites
-  }
-
   const init = () => {
     input = new InputHandler()
     input.addMapping('Space', (keyState) => {
@@ -57,13 +37,32 @@ function App() {
     canvas.height = GAME_HEIGHT
 
     // load all
-    Promise.all([loadBackgroundSprites(), loadMap('pink')]).then(
-      ([sprites, map]) => {
-        map.backgrounds.forEach((background) => {
-          drawBackground(background, ctx, sprites)
-        })
+    Promise.all([
+      loadPlayerSprite(),
+      loadBackgroundSprites(),
+      loadMap('pink'),
+    ]).then(([playerSprite, sprites, map]) => {
+      const comp = new Compositor()
+
+      const backgroundLayer = createBackgroundLayer(map.backgrounds, sprites)
+      comp.layers.push(backgroundLayer)
+
+      const pos = {
+        x: 100,
+        y: 100,
       }
-    )
+
+      const spriteLayer = createSpriteLayer(playerSprite, pos)
+      comp.layers.push(spriteLayer)
+
+      function update() {
+        comp.draw(ctx)
+        pos.x += 2
+        pos.y += 2
+        requestAnimationFrame(update)
+      }
+      update()
+    })
   }
 
   // player.draw(ctx)
@@ -73,31 +72,30 @@ function App() {
   const animate = () => {
     // console.log('animate')
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT)
-    new Surface(ctx, 20, 1, 3, 1, GAME_WIDTH, GAME_HEIGHT)
 
     // player.update(input)
     player.draw(ctx)
 
-    // Box width
-    var bw = GAME_WIDTH
-    // Box height
-    var bh = GAME_HEIGHT
-    // Padding
-    var p = 0
-    function drawBoard() {
-      const bw = GAME_WIDTH
-      const bh = GAME_HEIGHT
-      const lw = 0.2 // box border
-      const boxRow = 50 // how many boxes
-      const box = bw / boxRow // box size
-      ctx.lineWidth = lw
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.822)'
-      for (let x = 0; x < bw; x += box) {
-        for (let y = bh; y >= 0; y -= box) {
-          ctx.strokeRect(x, y, box, box)
-        }
-      }
-    }
+    // // Box width
+    // var bw = GAME_WIDTH
+    // // Box height
+    // var bh = GAME_HEIGHT
+    // // Padding
+    // var p = 0
+    // function drawBoard() {
+    //   const bw = GAME_WIDTH
+    //   const bh = GAME_HEIGHT
+    //   const lw = 0.2 // box border
+    //   const boxRow = 50 // how many boxes
+    //   const box = bw / boxRow // box size
+    //   ctx.lineWidth = lw
+    //   ctx.strokeStyle = 'rgba(255, 255, 255, 0.822)'
+    //   for (let x = 0; x < bw; x += box) {
+    //     for (let y = bh; y >= 0; y -= box) {
+    //       ctx.strokeRect(x, y, box, box)
+    //     }
+    //   }
+    // }
 
     // drawBoard()
     requestAnimationFrame(animate)
