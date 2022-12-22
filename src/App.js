@@ -5,6 +5,7 @@ import InputHandler from './classes/InputHandler'
 import { loadMap } from './functions/loader'
 import { createPlayer } from './functions/entities'
 import Timer from './classes/Timer'
+import { createCollisionLayer } from './functions/layers'
 
 function App() {
   let canvas
@@ -34,6 +35,8 @@ function App() {
     const gravity = 700
     player.pos.set(200, 0)
 
+    map.comp.layers.push(createCollisionLayer(map))
+
     map.entities.add(player)
 
     input = new InputHandler()
@@ -45,6 +48,16 @@ function App() {
       }
     })
     input.listenTo(window)
+
+    const mouseStates = ['mousedown', 'mousemove']
+    mouseStates.forEach((eName) => {
+      canvas.addEventListener(eName, (e) => {
+        if (e.buttons === 1) {
+          player.vel.set(0, 0)
+          player.pos.set(e.offsetX, e.offsetY)
+        }
+      })
+    })
 
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
