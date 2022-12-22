@@ -1,4 +1,4 @@
-export class InputHandler {
+export default class InputHandler {
   constructor() {
     // Holds the current state of a given key
     this.keyStates = new Map()

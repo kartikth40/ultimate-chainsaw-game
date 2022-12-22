@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { Player } from './classes/Player'
-import { InputHandler } from './classes/InputHandler'
+
+import InputHandler from './classes/InputHandler'
+import Compositor from './classes/Compositor'
+import Entity from './classes/Entity'
+import { createBackgroundLayer } from './functions/layers'
 import { loadMap } from './functions/loader'
 import { loadBackgroundSprites, loadPlayerSprite } from './functions/sprites'
-import { Compositor } from './classes/Compositor'
-import { createBackgroundLayer, createSpriteLayer } from './functions/layers'
 
 function App() {
   let canvas
@@ -13,8 +14,6 @@ function App() {
   let input
   const GAME_WIDTH = window.innerWidth
   const GAME_HEIGHT = window.innerHeight
-
-  const player = new Player(GAME_WIDTH, GAME_HEIGHT)
 
   const firstRender = useRef(true)
 
@@ -36,29 +35,47 @@ function App() {
     canvas.width = GAME_WIDTH
     canvas.height = GAME_HEIGHT
 
+    const createSpriteLayer = (entity, pos) => {
+      return function drawSpriteLayer(context) {
+        entity.draw(context)
+      }
+    }
+
     // load all
     Promise.all([
       loadPlayerSprite(),
       loadBackgroundSprites(),
       loadMap('pink'),
-    ]).then(([playerSprite, sprites, map]) => {
+    ]).then(([playerSprite, backgroundSprites, map]) => {
       const comp = new Compositor()
 
-      const backgroundLayer = createBackgroundLayer(map.backgrounds, sprites)
+      const backgroundLayer = createBackgroundLayer(
+        map.backgrounds,
+        backgroundSprites
+      )
       comp.layers.push(backgroundLayer)
 
-      const pos = {
-        x: 100,
-        y: 100,
+      const gravity = 0.5
+      const player = new Entity()
+      player.pos.set(100, 576)
+      player.vel.set(2, -10)
+
+      player.draw = function drawPlayer(context) {
+        playerSprite.draw('idle', context, this.pos.x, this.pos.y)
       }
 
-      const spriteLayer = createSpriteLayer(playerSprite, pos)
+      player.update = function updatePlayer() {
+        this.pos.x += this.vel.x
+        this.pos.y += this.vel.y
+      }
+
+      const spriteLayer = createSpriteLayer(player)
       comp.layers.push(spriteLayer)
 
       function update() {
         comp.draw(ctx)
-        pos.x += 2
-        pos.y += 2
+        player.update()
+        player.vel.y += gravity
         requestAnimationFrame(update)
       }
       update()
@@ -74,7 +91,7 @@ function App() {
     ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT)
 
     // player.update(input)
-    player.draw(ctx)
+    // player.draw(ctx)
 
     // // Box width
     // var bw = GAME_WIDTH

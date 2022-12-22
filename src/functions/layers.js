@@ -21,9 +21,3 @@ export const createBackgroundLayer = (backgrounds, sprites) => {
     context.drawImage(buffer, 0, 0)
   }
 }
-
-export const createSpriteLayer = (sprite, pos) => {
-  return function drawSpriteLayer(context) {
-    sprite.draw('idle', context, pos.x, pos.y)
-  }
-}
