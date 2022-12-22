@@ -3,8 +3,8 @@ import { Trait } from '../Entity'
 export class Jump extends Trait {
   constructor() {
     super('jump')
-    this.duration = 0.5
-    this.velocity = 200
+    this.duration = 0.3
+    this.velocity = 300
     this.engageTime = 0
   }
 
