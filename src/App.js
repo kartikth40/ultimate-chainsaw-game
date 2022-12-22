@@ -32,7 +32,7 @@ function App() {
     // load all
     const [player, map] = await Promise.all([createPlayer(), loadMap('pink')])
 
-    const gravity = 700
+    const gravity = 1000
     player.pos.set(200, 0)
 
     map.comp.layers.push(createCollisionLayer(map))
@@ -46,6 +46,12 @@ function App() {
       } else {
         player.jump.cancel()
       }
+    })
+    input.addMapping('ArrowRight', (keyState) => {
+      player.run.direction = keyState ? 1 : 0
+    })
+    input.addMapping('ArrowLeft', (keyState) => {
+      player.run.direction = keyState ? -1 : 0
     })
     input.listenTo(window)
 
