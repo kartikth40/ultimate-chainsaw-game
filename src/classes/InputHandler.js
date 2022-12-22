@@ -27,7 +27,6 @@ export default class InputHandler {
     }
 
     this.keyStates.set(keyCode, keyState)
-    console.log(this.keyStates)
     this.keyMap.get(keyCode)(keyState)
   }
 

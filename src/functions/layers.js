@@ -5,10 +5,8 @@ export const createBackgroundLayer = (map, sprites) => {
 
   const ctx = buffer.getContext('2d')
 
-  map.tiles.grid.forEach((column, x) => {
-    column.forEach((tile, y) => {
-      sprites.drawTile(tile.name, ctx, x, y)
-    })
+  map.tiles.forEach((tile, x, y) => {
+    sprites.drawTile(tile.name, ctx, x, y)
   })
 
   return function drawBackgroundLayer(context) {

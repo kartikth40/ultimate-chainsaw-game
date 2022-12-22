@@ -38,7 +38,6 @@ function App() {
 
     input = new InputHandler()
     input.addMapping('Space', (keyState) => {
-      console.log(keyState)
       if (keyState) {
         player.jump.start()
       } else {
@@ -49,6 +48,7 @@ function App() {
 
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
+      // console.log(player.pos)
       map.update(deltaTime)
       map.comp.draw(ctx)
       player.vel.y += gravity * deltaTime
