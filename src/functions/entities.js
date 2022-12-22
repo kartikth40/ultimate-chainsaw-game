@@ -1,7 +1,6 @@
 import Entity from '../classes/Entity'
 import { Jump } from '../classes/traits/Jump'
 import { Run } from '../classes/traits/run'
-import { Velocity } from '../classes/traits/Velocity'
 import { loadPlayerSprite } from './sprites'
 
 export const createPlayer = async () => {

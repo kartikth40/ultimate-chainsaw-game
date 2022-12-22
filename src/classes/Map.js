@@ -4,6 +4,8 @@ import TileCollider from './TileCollider'
 
 export class Map {
   constructor() {
+    this.gravity = 2000
+
     this.comp = new Compositor()
     this.entities = new Set()
     this.tiles = new Matrix()
@@ -19,6 +21,8 @@ export class Map {
 
       entity.pos.y += entity.vel.y * deltaTime
       this.tileCollider.checkY(entity)
+
+      entity.vel.y += this.gravity * deltaTime
     })
   }
 }

@@ -34,6 +34,7 @@ export default class InputHandler {
     const keyStates = ['keydown', 'keyup']
     keyStates.forEach((eventName) => {
       window.addEventListener(eventName, (event) => {
+        // console.log(event.code, eventName)
         this.handleEvent(event)
       })
     })

@@ -1,16 +1,15 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import InputHandler from './classes/InputHandler'
 import { loadMap } from './functions/loader'
 import { createPlayer } from './functions/entities'
+import { setupKeyboard } from './functions/setupKeyboard'
 import Timer from './classes/Timer'
 import { createCollisionLayer } from './functions/layers'
 
 function App() {
   let canvas
   let ctx
-  let input
   const GAME_WIDTH = window.innerWidth
   const GAME_HEIGHT = window.innerHeight
 
@@ -32,28 +31,13 @@ function App() {
     // load all
     const [player, map] = await Promise.all([createPlayer(), loadMap('pink')])
 
-    const gravity = 1000
     player.pos.set(200, 0)
 
     map.comp.layers.push(createCollisionLayer(map))
 
     map.entities.add(player)
 
-    input = new InputHandler()
-    input.addMapping('Space', (keyState) => {
-      if (keyState) {
-        player.jump.start()
-      } else {
-        player.jump.cancel()
-      }
-    })
-    input.addMapping('ArrowRight', (keyState) => {
-      player.run.direction = keyState ? 1 : 0
-    })
-    input.addMapping('ArrowLeft', (keyState) => {
-      player.run.direction = keyState ? -1 : 0
-    })
-    input.listenTo(window)
+    const input = setupKeyboard(player)
 
     const mouseStates = ['mousedown', 'mousemove']
     mouseStates.forEach((eName) => {
@@ -68,9 +52,9 @@ function App() {
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
       // console.log(player.pos)
+      // console.log(input.keyStates)
       map.update(deltaTime)
       map.comp.draw(ctx)
-      player.vel.y += gravity * deltaTime
     }
 
     timer.start()
