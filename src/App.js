@@ -7,6 +7,7 @@ import { createBackgroundLayer, createSpriteLayer } from './functions/layers'
 import { loadMap } from './functions/loader'
 import { loadBackgroundSprites } from './functions/sprites'
 import { createPlayer } from './functions/entities'
+import Timer from './classes/Timer'
 
 function App() {
   let canvas
@@ -25,11 +26,6 @@ function App() {
   }, [])
 
   const init = () => {
-    input = new InputHandler()
-    input.addMapping('Space', (keyState) => {
-      console.log(keyState)
-    })
-    input.listenTo(window)
     canvas = document.querySelector('#game-container')
     ctx = canvas.getContext('2d')
     canvas.width = GAME_WIDTH
@@ -49,35 +45,33 @@ function App() {
       )
       // comp.layers.push(backgroundLayer)
 
-      const gravity = 10
+      const gravity = 700
 
       player.pos.set(100, 200)
       player.vel.set(100, -300)
 
+      input = new InputHandler()
+      input.addMapping('Space', (keyState) => {
+        console.log(keyState)
+        if (keyState) {
+          player.jump.start()
+        } else {
+          player.jump.cancel()
+        }
+      })
+      input.listenTo(window)
+
       const spriteLayer = createSpriteLayer(player)
       comp.layers.push(spriteLayer)
 
-      const deltaTime = 1 / 60
-      let accumulatedTime = 0
-      let lastTime = 0
-
-      function update(time) {
-        accumulatedTime += (time - lastTime) / 1000
-        console.log(time - lastTime)
-
-        while (accumulatedTime > deltaTime) {
-          comp.draw(ctx)
-          player.update(deltaTime)
-          player.vel.y += gravity
-
-          accumulatedTime -= deltaTime
-        }
-
-        requestAnimationFrame(update)
-        // setTimeout(update, 1000 / 300, performance.now())
-        lastTime = time
+      const timer = new Timer(1 / 60)
+      timer.update = function update(deltaTime) {
+        player.update(deltaTime)
+        comp.draw(ctx)
+        player.vel.y += gravity * deltaTime
       }
-      update(0)
+
+      timer.start()
     })
   }
 
