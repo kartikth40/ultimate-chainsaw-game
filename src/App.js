@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import InputHandler from './classes/InputHandler'
 import Compositor from './classes/Compositor'
-import Entity from './classes/Entity'
-import { createBackgroundLayer } from './functions/layers'
+import { createBackgroundLayer, createSpriteLayer } from './functions/layers'
 import { loadMap } from './functions/loader'
-import { loadBackgroundSprites, loadPlayerSprite } from './functions/sprites'
+import { loadBackgroundSprites } from './functions/sprites'
+import { createPlayer } from './functions/entities'
 
 function App() {
   let canvas
@@ -35,88 +35,52 @@ function App() {
     canvas.width = GAME_WIDTH
     canvas.height = GAME_HEIGHT
 
-    const createSpriteLayer = (entity, pos) => {
-      return function drawSpriteLayer(context) {
-        entity.draw(context)
-      }
-    }
-
     // load all
     Promise.all([
-      loadPlayerSprite(),
+      createPlayer(),
       loadBackgroundSprites(),
       loadMap('pink'),
-    ]).then(([playerSprite, backgroundSprites, map]) => {
+    ]).then(([player, backgroundSprites, map]) => {
       const comp = new Compositor()
 
       const backgroundLayer = createBackgroundLayer(
         map.backgrounds,
         backgroundSprites
       )
-      comp.layers.push(backgroundLayer)
+      // comp.layers.push(backgroundLayer)
 
-      const gravity = 0.5
-      const player = new Entity()
-      player.pos.set(100, 576)
-      player.vel.set(2, -10)
+      const gravity = 10
 
-      player.draw = function drawPlayer(context) {
-        playerSprite.draw('idle', context, this.pos.x, this.pos.y)
-      }
-
-      player.update = function updatePlayer() {
-        this.pos.x += this.vel.x
-        this.pos.y += this.vel.y
-      }
+      player.pos.set(100, 200)
+      player.vel.set(100, -300)
 
       const spriteLayer = createSpriteLayer(player)
       comp.layers.push(spriteLayer)
 
-      function update() {
-        comp.draw(ctx)
-        player.update()
-        player.vel.y += gravity
+      const deltaTime = 1 / 60
+      let accumulatedTime = 0
+      let lastTime = 0
+
+      function update(time) {
+        accumulatedTime += (time - lastTime) / 1000
+        console.log(time - lastTime)
+
+        while (accumulatedTime > deltaTime) {
+          comp.draw(ctx)
+          player.update(deltaTime)
+          player.vel.y += gravity
+
+          accumulatedTime -= deltaTime
+        }
+
         requestAnimationFrame(update)
+        // setTimeout(update, 1000 / 300, performance.now())
+        lastTime = time
       }
-      update()
+      update(0)
     })
   }
 
-  // player.draw(ctx)
-  // player.update(input)
-  // animate()
-
-  const animate = () => {
-    // console.log('animate')
-    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT)
-
-    // player.update(input)
-    // player.draw(ctx)
-
-    // // Box width
-    // var bw = GAME_WIDTH
-    // // Box height
-    // var bh = GAME_HEIGHT
-    // // Padding
-    // var p = 0
-    // function drawBoard() {
-    //   const bw = GAME_WIDTH
-    //   const bh = GAME_HEIGHT
-    //   const lw = 0.2 // box border
-    //   const boxRow = 50 // how many boxes
-    //   const box = bw / boxRow // box size
-    //   ctx.lineWidth = lw
-    //   ctx.strokeStyle = 'rgba(255, 255, 255, 0.822)'
-    //   for (let x = 0; x < bw; x += box) {
-    //     for (let y = bh; y >= 0; y -= box) {
-    //       ctx.strokeRect(x, y, box, box)
-    //     }
-    //   }
-    // }
-
-    // drawBoard()
-    requestAnimationFrame(animate)
-  }
   return <GameContainer id="game-container"></GameContainer>
 }
 
