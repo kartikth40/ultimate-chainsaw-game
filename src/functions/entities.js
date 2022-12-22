@@ -6,6 +6,8 @@ import { loadPlayerSprite } from './sprites'
 export const createPlayer = async () => {
   const sprite = await loadPlayerSprite()
   const player = new Entity()
+  player.size.set(32, 64)
+
   player.addTrait(new Jump())
   player.addTrait(new Velocity())
   player.draw = function drawPlayer(context) {

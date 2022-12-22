@@ -34,10 +34,19 @@ export const createCollisionLayer = (map) => {
     return getByIndexOriginal.call(tileResolver, x, y)
   }
   return function drawCollision(context) {
+    // marking the collision range in blue
     context.strokeStyle = 'blue'
     resolvedTiles.forEach(({ x, y }) => {
       context.beginPath()
       context.rect(x * tileSize, y * tileSize, tileSize, tileSize)
+      context.stroke()
+    })
+
+    // marking the player RED
+    context.strokeStyle = 'red'
+    map.entities.forEach((entity) => {
+      context.beginPath()
+      context.rect(entity.pos.x, entity.pos.y, entity.size.x, entity.size.y)
       context.stroke()
     })
     resolvedTiles.length = 0
