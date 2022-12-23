@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { loadMap } from './functions/loader'
 import { createPlayer } from './functions/entities'
 import { setupKeyboard } from './functions/setupKeyboard'
+import { setupMouse } from './functions/setupMouse'
 import Timer from './classes/Timer'
 import { createCollisionLayer } from './functions/layers'
 import Camera from './classes/Camera'
@@ -40,16 +41,7 @@ function App() {
     map.comp.layers.push(createCollisionLayer(map))
 
     const input = setupKeyboard(player)
-
-    const mouseStates = ['mousedown', 'mousemove']
-    mouseStates.forEach((eName) => {
-      canvas.addEventListener(eName, (e) => {
-        if (e.buttons === 1) {
-          player.vel.set(0, 0)
-          player.pos.set(e.offsetX + camera.pos.x, e.offsetY + camera.pos.y)
-        }
-      })
-    })
+    const mouse = setupMouse(canvas, player, camera)
 
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
