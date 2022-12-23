@@ -1,4 +1,5 @@
 {
+  "name": "pink",
   "imageURL": "/img/tiles.png",
   "tileW": 32,
   "tileH": 32,
@@ -8,13 +9,22 @@
       "index": [0,0]
     },
     {
+      "name": "brick_pink",
+      "index": [0,1]
+    },
+    {
       "name": "sky",
       "index": [0,2]
+    },
+    {
+      "name": "brick_purple",
+      "index": [0,3]
     }
   ],
   "backgrounds": [
     {
       "tile": "sky",
+      "state": "air", 
       "ranges": [
         [
           0, 80,
@@ -24,6 +34,7 @@
     },
     {
       "tile": "ground",
+      "state": "solid", 
       "ranges": [
         [
           0, 80, 
@@ -33,6 +44,7 @@
     },
     {
       "tile": "sky",
+      "state": "air", 
       "ranges": [
         [
           40, 5, 
@@ -41,7 +53,8 @@
       ]
     },
     {
-      "tile": "ground",
+      "tile": "brick_pink",
+      "state": "solid", 
       "ranges": [
         [
           5,18
@@ -60,6 +73,43 @@
         [
           29, 1, 
           5, 12
+        ]
+      ]
+    },
+    {
+      "tile": "brick_purple",
+      "state": "solid", 
+      "ranges": [
+        [
+          50,18
+        ],
+        [
+          40, 13,
+          5, 1
+        ],
+        [
+          52, 1,
+          6, 4
+        ],
+        [
+          60, 10, 
+          18, 1
+        ],
+        [
+          61, 8,
+          17, 1
+        ],
+        [
+          62, 6, 
+          16, 1
+        ],
+        [
+          62, 4, 
+          15, 1
+        ],
+        [
+          78,1,
+          5,15
         ]
       ]
     }

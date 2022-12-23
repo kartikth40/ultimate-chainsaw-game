@@ -6,7 +6,7 @@ import { createPlayer } from './functions/entities'
 import { setupKeyboard } from './functions/setupKeyboard'
 import { setupMouse } from './functions/setupMouse'
 import Timer from './classes/Timer'
-import { createCollisionLayer } from './functions/layers'
+import { createCameraLayer, createCollisionLayer } from './functions/layers'
 import Camera from './classes/Camera'
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
     player.pos.set(200, 0)
     map.entities.add(player)
 
-    map.comp.layers.push(createCollisionLayer(map))
+    map.comp.layers.push(createCollisionLayer(map), createCameraLayer(camera))
 
     const input = setupKeyboard(player)
     const mouse = setupMouse(canvas, player, camera)

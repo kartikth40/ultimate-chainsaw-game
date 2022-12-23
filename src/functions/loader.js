@@ -21,6 +21,7 @@ const createTiles = (map, backgrounds) => {
       for (let y = yStart; y < yEnd; y++) {
         map.tiles.set(x, y, {
           name: background.tile,
+          state: background.state,
         })
       }
     }
@@ -49,7 +50,6 @@ const loadSpriteSheet = async (name) => {
   const image = await loadImage(sheetSpec.imageURL)
   const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH)
   sheetSpec.tiles.forEach((tileSpec) => {
-    console.log(tileSpec)
     sprites.define(tileSpec.name, tileSpec.index[0], tileSpec.index[1])
   })
   return sprites
