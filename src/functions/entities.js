@@ -12,7 +12,7 @@ export const createPlayer = async () => {
   player.addTrait(new Jump())
   // player.addTrait(new Velocity())
   player.draw = function drawPlayer(context) {
-    sprite.draw('idle', context, this.pos.x, this.pos.y)
+    sprite.draw('idle', context, 0, 0)
   }
   return player
 }

@@ -6,6 +6,7 @@ import { createPlayer } from './functions/entities'
 import { setupKeyboard } from './functions/setupKeyboard'
 import Timer from './classes/Timer'
 import { createCollisionLayer } from './functions/layers'
+import Camera from './classes/Camera'
 
 function App() {
   let canvas
@@ -31,11 +32,12 @@ function App() {
     // load all
     const [player, map] = await Promise.all([createPlayer(), loadMap('pink')])
 
+    const camera = new Camera()
+
     player.pos.set(200, 0)
+    map.entities.add(player)
 
     map.comp.layers.push(createCollisionLayer(map))
-
-    map.entities.add(player)
 
     const input = setupKeyboard(player)
 
@@ -44,17 +46,15 @@ function App() {
       canvas.addEventListener(eName, (e) => {
         if (e.buttons === 1) {
           player.vel.set(0, 0)
-          player.pos.set(e.offsetX, e.offsetY)
+          player.pos.set(e.offsetX + camera.pos.x, e.offsetY + camera.pos.y)
         }
       })
     })
 
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
-      // console.log(player.pos)
-      // console.log(input.keyStates)
       map.update(deltaTime)
-      map.comp.draw(ctx)
+      map.comp.draw(ctx, camera)
     }
 
     timer.start()

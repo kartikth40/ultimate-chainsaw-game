@@ -9,6 +9,14 @@ export const setupKeyboard = (entity) => {
     }
   })
 
+  input.addMapping('ArrowUp', (keyState) => {
+    if (keyState) {
+      entity.jump.start()
+    } else {
+      entity.jump.cancel()
+    }
+  })
+
   input.addMapping('ArrowRight', (keyState) => {
     if (keyState) {
       entity.run.direction = 1
