@@ -12,15 +12,24 @@ export const createPlayer = async () => {
   player.addTrait(new Run())
   player.addTrait(new Jump())
 
-  const frames = sprite.tiles.get('run')
-  const runAnime = createAnime(frames, 10)
+  const runFrames = sprite.tiles.get('run')
+  const runAnime = createAnime('run', runFrames, 10)
+
+  const idleFrames = sprite.tiles.get('idle')
+  const idleAnime = createAnime('idle', idleFrames, 0.1)
 
   const routeFrame = (player) => {
+    if (player.jump.wallSlide) {
+      return ['wall_slide', 0]
+    }
+    if (!player.jump.ready) {
+      return ['jump', 0]
+    }
     if (player.run.direction !== 0) {
       return runAnime(player.run.distance)
     }
 
-    return ['idle', 0]
+    return idleAnime(player.totalTime)
   }
 
   player.draw = function drawPlayer(context) {

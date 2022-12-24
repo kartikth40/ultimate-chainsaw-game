@@ -47,6 +47,14 @@ function App() {
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
       map.update(deltaTime)
+      // if (player.pos.x > 2000) {
+      //   camera.pos.x = 2000 - 400
+      // } else if (player.pos.x > 400) {
+      //   camera.pos.x = player.pos.x - 400
+      // }
+      // if (player.pos.y > 200) {
+      //   camera.pos.y = player.pos.y - 200
+      // }
       map.comp.draw(ctx, camera)
     }
 

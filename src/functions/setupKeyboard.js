@@ -3,7 +3,7 @@ export const setupKeyboard = (entity) => {
   const input = new InputHandler()
   input.addMapping('Space', (keyState) => {
     if (keyState) {
-      entity.jump.start()
+      entity.jump.start(entity)
     } else {
       entity.jump.cancel()
     }
@@ -11,7 +11,7 @@ export const setupKeyboard = (entity) => {
 
   input.addMapping('ArrowUp', (keyState) => {
     if (keyState) {
-      entity.jump.start()
+      entity.jump.start(entity)
     } else {
       entity.jump.cancel()
     }
