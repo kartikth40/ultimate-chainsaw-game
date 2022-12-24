@@ -4,15 +4,23 @@ export class SpriteSheet {
     this.width = width
     this.height = height
     this.tiles = new Map()
+    this.flippedTiles = new Map()
   }
 
   defineBuffer(x, y) {
-    const buffer = document.createElement('canvas')
-    buffer.width = this.width
-    buffer.height = this.height
-    buffer
-      .getContext('2d')
-      .drawImage(
+    const buffers = [false, true].map((flip) => {
+      const buffer = document.createElement('canvas')
+      buffer.width = this.width
+      buffer.height = this.height
+
+      const context = buffer.getContext('2d')
+
+      if (flip) {
+        context.scale(-1, 1)
+        context.translate(-this.width, 0)
+      }
+
+      context.drawImage(
         this.image,
         x * this.width,
         y * this.height,
@@ -24,42 +32,57 @@ export class SpriteSheet {
         this.height
       )
 
-    return buffer
+      return buffer
+    })
+    return buffers
   }
 
   // define current sprite at (x,y) of the spritesheet
   define(name, x, y) {
-    const buffer = this.defineBuffer(x, y)
-    this.tiles.set(name, buffer)
+    const buffers = this.defineBuffer(x, y)
+    this.tiles.set(name, buffers[0])
+    this.flippedTiles.set(name, buffers[0])
   }
 
   defineState(name, range) {
     const [row, len] = range
     for (let col = 0; col < len; col++) {
-      console.log(row, col, name)
-      const currentBuffer = this.defineBuffer(col, row)
+      // console.log(row, col, name)
+      const [currentBuffer, currentFlippedBuffer] = this.defineBuffer(col, row)
       if (this.tiles.has(name)) {
-        let val = this.tiles.get(name)
-        val.push(currentBuffer)
-        this.tiles.set(name, val)
+        let buf = this.tiles.get(name)
+        buf.push(currentBuffer)
+        this.tiles.set(name, buf)
+
+        let flippedBuf = this.flippedTiles.get(name)
+        flippedBuf.push(currentFlippedBuffer)
+        this.flippedTiles.set(name, flippedBuf)
       } else {
         this.tiles.set(name, [currentBuffer])
+        this.flippedTiles.set(name, [currentFlippedBuffer])
       }
     }
   }
 
   // draw the sprite on 'context' at (x,y)
-  draw(name, context, x, y) {
-    const buffer = this.tiles.get(name)
-    context.drawImage(buffer, x, y)
+  drawTile(name, context, x, y, flip = false) {
+    let buffer
+    if (flip) {
+      buffer = this.flippedTiles.get(name)
+    } else {
+      buffer = this.tiles.get(name)
+    }
+    context.drawImage(buffer, x * this.width, y * this.height)
   }
 
-  drawFrames(name, context, x, y) {
-    const buffers = this.tiles.get(name)
-    context.drawImage(buffers[3], x * this.width, y * this.height)
-  }
-
-  drawTile(name, context, x, y) {
-    this.draw(name, context, x * this.width, y * this.height)
+  // draw the animation sprite on 'context' at (x,y) index
+  drawFrames(name, context, frameNo, x, y, flip) {
+    let buffers
+    if (flip) {
+      buffers = this.flippedTiles.get(name)
+    } else {
+      buffers = this.tiles.get(name)
+    }
+    context.drawImage(buffers[frameNo], x * this.width, y * this.height)
   }
 }

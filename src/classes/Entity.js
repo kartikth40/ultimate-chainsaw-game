@@ -15,6 +15,7 @@ export default class Entity {
     this.pos = new Vector(0, 0)
     this.vel = new Vector(0, 0)
     this.size = new Vector(0, 0)
+    this.totalTime = 0
 
     this.traits = []
   }
@@ -28,5 +29,7 @@ export default class Entity {
     this.traits.forEach((trait) => {
       trait.update(this, deltaTime)
     })
+
+    this.totalTime += deltaTime
   }
 }

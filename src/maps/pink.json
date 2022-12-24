@@ -10,15 +10,19 @@
     },
     {
       "name": "brick_pink",
-      "index": [0,1]
-    },
-    {
-      "name": "sky",
-      "index": [0,2]
+      "index": [1,0]
     },
     {
       "name": "brick_purple",
-      "index": [0,3]
+      "index": [2,0]
+    },
+    {
+      "name": "sky",
+      "index": [0,1]
+    },
+    {
+      "name": "night_sky",
+      "index":[1,1]
     }
   ],
   "backgrounds": [

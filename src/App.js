@@ -38,7 +38,8 @@ function App() {
     player.pos.set(200, 0)
     map.entities.add(player)
 
-    map.comp.layers.push(createCollisionLayer(map), createCameraLayer(camera))
+    // debug layers
+    // map.comp.layers.push(createCollisionLayer(map), createCameraLayer(camera))
 
     const input = setupKeyboard(player)
     const mouse = setupMouse(canvas, player, camera)

@@ -8,28 +8,27 @@ export const createBackgroundLayer = (map, sprites) => {
 
   const ctx = buffer.getContext('2d')
 
-  let startIndex, endIndex
+  const redraw = (startXIndex, endXIndex, startYIndex, endYIndex) => {
+    for (let x = startXIndex; x <= endXIndex; x++) {
+      for (let y = startYIndex; y <= endYIndex; y++) {
+        const col = tiles.grid[x]
+        if (!col) continue
+        const tile = col[y]
+        if (!tile) continue
 
-  const redraw = (drawFrom, drawTo) => {
-    if (drawFrom === startIndex && drawTo === endIndex) return
-    startIndex = drawFrom
-    endIndex = drawTo
-    console.log('redrawing')
-    for (let x = startIndex; x <= endIndex; x++) {
-      const col = tiles.grid[x]
-      if (col) {
-        col.forEach((tile, y) => {
-          sprites.drawTile(tile.name, ctx, x, y)
-        })
+        sprites.drawTile(tile.name, ctx, x, y)
       }
     }
   }
 
   return function drawBackgroundLayer(context, camera) {
     const drawWidth = resolver.toIndex(camera.size.x)
-    const drawFrom = resolver.toIndex(camera.pos.x)
-    const drawTo = drawFrom + drawWidth
-    redraw(drawFrom, drawTo)
+    const drawHeight = resolver.toIndex(camera.size.y)
+    const drawXFrom = resolver.toIndex(camera.pos.x)
+    const drawXTo = drawXFrom + drawWidth
+    const drawYFrom = resolver.toIndex(camera.pos.y)
+    const drawYTo = drawYFrom + drawHeight
+    redraw(drawXFrom, drawXTo, drawYFrom, drawYTo)
 
     context.drawImage(buffer, -camera.pos.x, -camera.pos.y)
   }
