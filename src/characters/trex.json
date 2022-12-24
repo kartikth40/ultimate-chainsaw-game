@@ -1,0 +1,27 @@
+{
+  "imageURL": "/img/trex.png",
+  "tileW": 32,
+  "tileH": 32,
+  "states": [
+    {
+      "name": "idle",
+      "range": [0,5]
+    },
+    {
+      "name": "run",
+      "range": [1,6]
+    },
+    {
+      "name": "jump",
+      "range": [2,4]
+    },
+    {
+      "name": "wall_slide",
+      "range": [3,1]
+    },
+    {
+      "name": "die",
+      "range": [4,13]
+    }
+  ]
+}

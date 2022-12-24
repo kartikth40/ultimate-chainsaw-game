@@ -6,8 +6,7 @@ export class SpriteSheet {
     this.tiles = new Map()
   }
 
-  // define current sprite at (x,y) of the spritesheet
-  define(name, x, y) {
+  defineBuffer(x, y) {
     const buffer = document.createElement('canvas')
     buffer.width = this.width
     buffer.height = this.height
@@ -24,13 +23,40 @@ export class SpriteSheet {
         this.width,
         this.height
       )
+
+    return buffer
+  }
+
+  // define current sprite at (x,y) of the spritesheet
+  define(name, x, y) {
+    const buffer = this.defineBuffer(x, y)
     this.tiles.set(name, buffer)
+  }
+
+  defineState(name, range) {
+    const [row, len] = range
+    for (let col = 0; col < len; col++) {
+      console.log(row, col, name)
+      const currentBuffer = this.defineBuffer(col, row)
+      if (this.tiles.has(name)) {
+        let val = this.tiles.get(name)
+        val.push(currentBuffer)
+        this.tiles.set(name, val)
+      } else {
+        this.tiles.set(name, [currentBuffer])
+      }
+    }
   }
 
   // draw the sprite on 'context' at (x,y)
   draw(name, context, x, y) {
     const buffer = this.tiles.get(name)
     context.drawImage(buffer, x, y)
+  }
+
+  drawFrames(name, context, x, y) {
+    const buffers = this.tiles.get(name)
+    context.drawImage(buffers[3], x * this.width, y * this.height)
   }
 
   drawTile(name, context, x, y) {

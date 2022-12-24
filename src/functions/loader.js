@@ -44,8 +44,12 @@ const loadMapJSON = async (name) => {
   const json = await import(`../maps/${name}.json`)
   return json
 }
+const loadCharacterJSON = async (name) => {
+  const json = await import(`../characters/${name}.json`)
+  return json
+}
 
-const loadSpriteSheet = async (name) => {
+export const loadMapSpriteSheet = async (name) => {
   const sheetSpec = await loadMapJSON(name)
   const image = await loadImage(sheetSpec.imageURL)
   const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH)
@@ -55,10 +59,20 @@ const loadSpriteSheet = async (name) => {
   return sprites
 }
 
+export const loadCharacterSpriteSheet = async (name) => {
+  const sheetSpec = await loadCharacterJSON(name)
+  const image = await loadImage(sheetSpec.imageURL)
+  const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH)
+  sheetSpec.states.forEach((frameSpec) => {
+    sprites.defineState(frameSpec.name, frameSpec.range)
+  })
+  return sprites
+}
+
 export const loadMap = async (name) => {
   const [mapSpec, backgroundSprites] = await Promise.all([
     loadMapJSON(name),
-    loadSpriteSheet(name),
+    loadMapSpriteSheet(name),
   ])
   const map = new Map()
 
