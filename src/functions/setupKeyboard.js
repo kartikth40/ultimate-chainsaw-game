@@ -18,22 +18,10 @@ export const setupKeyboard = (entity) => {
   })
 
   input.addMapping('ArrowRight', (keyState) => {
-    if (keyState) {
-      entity.run.direction = 1
-    } else if (input.keyStates.get('ArrowLeft') === 1) {
-      entity.run.direction = -1
-    } else {
-      entity.run.direction = 0
-    }
+    entity.run.direction += keyState ? 1 : -1
   })
   input.addMapping('ArrowLeft', (keyState) => {
-    if (keyState) {
-      entity.run.direction = -1
-    } else if (input.keyStates.get('ArrowRight') === 1) {
-      entity.run.direction = 1
-    } else {
-      entity.run.direction = 0
-    }
+    entity.run.direction += keyState ? -1 : 1
   })
   input.listenTo(window)
 }

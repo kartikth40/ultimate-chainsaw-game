@@ -22,7 +22,7 @@ export const createPlayer = async () => {
     if (player.jump.wallSlide) {
       return ['wall_slide', 0]
     }
-    if (!player.jump.ready) {
+    if (!player.jump.onGround) {
       return ['jump', 0]
     }
     if (player.run.direction !== 0) {
