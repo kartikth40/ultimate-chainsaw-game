@@ -32,7 +32,7 @@ export class Jump extends Trait {
     if (side === 'bottom') {
       this.onGround = true
     }
-    if ((side === 'left' || side === 'right') && !this.onGround) {
+    if (side === 'left' || side === 'right') {
       this.wallSlide = true
       entity.vel.y = this.wallSlideVelocity
     }
