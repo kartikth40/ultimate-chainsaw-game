@@ -23,6 +23,54 @@
     {
       "name": "night_sky",
       "index":[1,1]
+    },
+    {
+      "name": "l_shape_1",
+      "index": [9,0]
+    },
+    {
+      "name": "l_shape_2",
+      "index": [10,0]
+    },
+    {
+      "name": "l_shape_3",
+      "index": [11,0]
+    },
+    {
+      "name": "l_shape_4",
+      "index": [12,0]
+    },
+    {
+      "name": "l_shape_5",
+      "index": [12,1]
+    },
+    {
+      "name": "l_shape_6",
+      "index": [12,2]
+    },
+    {
+      "name": "l_shape_7",
+      "index": [12,3]
+    },
+    {
+      "name": "log_5_1",
+      "index": [4,0]
+    },
+    {
+      "name": "log_5_2",
+      "index": [5,0]
+    },
+    {
+      "name": "log_5_3",
+      "index": [6,0]
+    },
+    {
+      "name": "log_5_4",
+      "index": [7,0]
+    },
+    {
+      "name": "log_5_5",
+      "index": [8,0]
     }
   ],
   "backgrounds": [
@@ -128,6 +176,116 @@
           5,15
         ]
       ]
+    },
+    {
+      "pattern": "l_shape",
+      "state": "solid",
+      "type": "trap",
+      "ranges":[
+        [5,5]
+      ]
+    },
+    {
+      "pattern": "log_5",
+      "state": "solid",
+      "type": "trap",
+      "ranges":[
+        [10,5]
+      ]
     }
-  ]
+  ],
+  "patterns": {
+    "l_shape": {
+      "backgrounds":[
+        {
+          "tile": "l_shape_1",
+          "state": "solid", 
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "tile": "l_shape_2",
+          "state": "solid",
+          "ranges": [
+            [1, 0]
+          ]
+        },
+        {
+          "tile": "l_shape_3",
+          "state": "solid", 
+          "ranges": [
+            [2, 0]
+          ]
+        },
+        {
+          "tile": "l_shape_4",
+          "state": "solid",
+          "ranges": [
+            [3, 0]
+          ]
+        },
+        {
+          "tile": "l_shape_5",
+          "state": "solid", 
+          "ranges": [
+            [3, 1]
+          ]
+        },
+        {
+          "tile": "l_shape_6",
+          "state": "solid",
+          "ranges": [
+            [3, 2]
+          ]
+        },
+        {
+          "tile": "l_shape_7",
+          "state": "solid", 
+          "ranges": [
+            [3, 3]
+          ]
+        }
+      ]
+    },
+    "log_5": {
+      "backgrounds":[
+        {
+          "tile": "log_5_1",
+          "state": "solid", 
+          "ranges": [
+            [0, 0]
+          ]
+        },
+        {
+          "tile": "log_5_2",
+          "state": "solid",
+          "ranges": [
+            [1, 0]
+          ]
+        },
+        {
+          "tile": "log_5_3",
+          "state": "solid", 
+          "ranges": [
+            [2, 0]
+          ]
+        },
+        {
+          "tile": "log_5_4",
+          "state": "solid",
+          "ranges": [
+            [3, 0]
+          ]
+        },
+        {
+          "tile": "log_5_5",
+          "state": "solid", 
+          "ranges": [
+            [4, 0]
+          ]
+        }
+      ]
+    }
+  }  
 }

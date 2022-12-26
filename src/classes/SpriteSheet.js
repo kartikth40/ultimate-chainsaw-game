@@ -72,6 +72,7 @@ export class SpriteSheet {
     } else {
       buffer = this.tiles.get(name)
     }
+    // console.log(this.tiles)
     context.drawImage(buffer, x * this.width, y * this.height)
   }
 

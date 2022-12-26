@@ -7,7 +7,8 @@ import { createAnime } from './anime'
 export const createPlayer = async () => {
   const sprite = await loadCharacterSpriteSheet('trex')
   const player = new Entity()
-  player.size.set(32, 32)
+  player.size.set(24, 32)
+  player.offset.set(8, 0)
 
   player.addTrait(new Run())
   player.addTrait(new Jump())
@@ -35,6 +36,8 @@ export const createPlayer = async () => {
   player.draw = function drawPlayer(context) {
     const [state, frameIndex] = routeFrame(this)
     const flip = player.run.heading < 0
+    if (this.run.heading > 0) this.offset.set(8, 0)
+    else this.offset.set(0, 0)
     sprite.drawFrames(state, context, frameIndex, 0, 0, flip)
   }
   return player

@@ -1,4 +1,5 @@
 import { Vector } from './Math'
+import BoundingBox from './BoundingBox'
 
 export class Trait {
   constructor(name) {
@@ -17,6 +18,8 @@ export default class Entity {
     this.pos = new Vector(0, 0)
     this.vel = new Vector(0, 0)
     this.size = new Vector(0, 0)
+    this.offset = new Vector(0, 0)
+    this.bounds = new BoundingBox(this.pos, this.size, this.offset)
     this.totalTime = 0
 
     this.traits = []
