@@ -15,7 +15,7 @@ export const loadMapJSON = async (name) => {
   return json
 }
 export const loadCharacterJSON = async (name) => {
-  const json = await import(`../entities/${name}.json`)
+  const json = await import(`../entitiesData/${name}.json`)
   return json
 }
 

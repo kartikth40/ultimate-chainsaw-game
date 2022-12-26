@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { loadMap } from './loaders/map'
-import { createPlayer } from './functions/entities'
+import { loadPlayer } from './entities/player'
 import { setupKeyboard } from './functions/setupKeyboard'
 import { setupMouse } from './functions/setupMouse'
 import Timer from './classes/Timer'
@@ -32,8 +32,12 @@ function App() {
     canvas.height = GAME_HEIGHT
 
     // load all
-    const [player, map] = await Promise.all([createPlayer(), loadMap('pink')])
+    const [createPlayer, map] = await Promise.all([
+      loadPlayer(),
+      loadMap('pink'),
+    ])
 
+    const player = createPlayer()
     const camera = new Camera()
 
     player.pos.set(200, 0)
