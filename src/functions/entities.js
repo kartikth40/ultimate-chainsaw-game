@@ -7,7 +7,7 @@ import { createAnime } from './anime'
 export const createPlayer = async () => {
   const sprite = await loadCharacterSpriteSheet('trex')
   const player = new Entity()
-  player.size.set(24, 32)
+  player.size.set(24, 30)
   player.offset.set(8, 0)
 
   player.addTrait(new Run())

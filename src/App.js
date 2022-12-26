@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-import { loadMap } from './functions/loader'
+import { loadMap } from './loaders/map'
 import { createPlayer } from './functions/entities'
 import { setupKeyboard } from './functions/setupKeyboard'
 import { setupMouse } from './functions/setupMouse'
@@ -40,7 +40,7 @@ function App() {
     map.entities.add(player)
 
     // debug layers
-    // map.comp.layers.push(createCollisionLayer(map), createCameraLayer(camera))
+    map.comp.layers.push(createCollisionLayer(map), createCameraLayer(camera))
 
     const input = setupKeyboard(player)
     const mouse = setupMouse(canvas, player, camera)
@@ -48,7 +48,6 @@ function App() {
     const timer = new Timer(1 / 60)
     timer.update = function update(deltaTime) {
       map.update(deltaTime)
-
       setupCameraMovement(player, camera)
       map.comp.draw(ctx, camera)
     }
