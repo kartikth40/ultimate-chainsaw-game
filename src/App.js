@@ -49,7 +49,7 @@ function App() {
     const input = setupKeyboard(player)
     const mouse = setupMouse(canvas, player, camera)
 
-    const timer = new Timer(1 / 60)
+    const timer = new Timer()
     timer.update = function update(deltaTime) {
       map.update(deltaTime)
       setupCameraMovement(player, camera)
